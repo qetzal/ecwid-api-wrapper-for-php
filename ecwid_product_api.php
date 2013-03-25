@@ -8,7 +8,7 @@ class EcwidProductApi {
 	var $error_code = '';
 
 	var $ECWID_PRODUCT_API_ENDPOINT = "http://app.ecwid.com/api/v1";
-	
+
 	function __construct($store_id) {
 		$this->store_id = intval($store_id);
 	}
@@ -29,7 +29,7 @@ class EcwidProductApi {
 	}
 
 	function internal_fetch_url_libcurl($url) {
-		if (intval($timeout) <= 0)
+		if (empty($timeout) || intval($timeout) <= 0)
 			$timeout = 90;
 		if (!function_exists('curl_init'))
 			return array("code"=>"0","data"=>"libcurl is not installed");
@@ -41,7 +41,7 @@ class EcwidProductApi {
 		curl_setopt ($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt ($ch, CURLOPT_HTTPGET, 1);
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-		
+
 		$body = curl_exec ($ch);
 		$errno = curl_errno ($ch);
 		$error = curl_error($ch);
@@ -133,7 +133,7 @@ class EcwidProductApi {
 					$api_url .= $action_param_str;
 				}
 			}
-			
+
 			$api_url =  $this->ECWID_PRODUCT_API_ENDPOINT . "/" . $this->store_id . "/batch?". $api_url;
 			echo $api_url;
 			$data = $this->process_request($api_url);
@@ -147,7 +147,7 @@ class EcwidProductApi {
 		$random_products = $this->process_request($api_url);
 		return $random_products;
 	}
-	
+
 	function get_profile() {
 		$api_url = $this->ECWID_PRODUCT_API_ENDPOINT . "/" . $this->store_id . "/profile";
 		$profile = $this->process_request($api_url);
